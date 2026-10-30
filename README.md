@@ -16,7 +16,7 @@ from and holds the zip and that tag's LICENSE.
 .binaryTarget(
     name: "llama",
     url: "https://github.com/dylanroy/llama-xcframework/releases/download/b12015/llama-b12015-xcframework.zip",
-    checksum: "6db499c80fa4d29972f4df31d595647fe164e16bd1c4a523224d7babf5bd4a7e"
+    checksum: "183b19169ed27bf8bf342577e0a57350950a1e025165e9899a44fae8cbf56ba3"
 ),
 ```
 
@@ -30,10 +30,13 @@ With Xcode and CMake:
 git clone --depth 1 --branch b12015 https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
 ./build-xcframework.sh ios-sim ios-device macos
-ditto -c -k --keepParent build-apple/llama.xcframework llama-b12015-xcframework.zip
+ditto -c -k --norsrc --noextattr --noacl --keepParent build-apple/llama.xcframework llama-b12015-xcframework.zip
 ```
 
 Slices: `ios-arm64`, `ios-arm64_x86_64-simulator`, `macos-arm64_x86_64`, each with dSYMs.
+
+`--norsrc --noextattr` keeps macOS's `._` AppleDouble files out of the zip. SwiftPM unzips them as plain files, and
+clang then fails on `Headers/._*.h`.
 
 ## License
 
